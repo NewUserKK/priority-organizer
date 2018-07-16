@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="priorg.main.MainController">
+   <children>
+      <MenuBar prefHeight="30.0">
+        <menus>
+          <Menu fx:id="menuFIle" mnemonicParsing="false" text="File" />
+          <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit" />
+          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#onAboutMenu" text="About" />
+               </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.25, 0.75" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="645.0" prefWidth="1000.0">
+        <items>
+            <SplitPane id="tasksPane" dividerPositions="0.04, 0.93" orientation="VERTICAL">
+               <items>
+                  <Label id="tasksLabel" prefHeight="30.0" text="Tasks" />
+                  <TreeView id="tasksTree" prefHeight="200.0" prefWidth="196.0" />
+                  <ButtonBar id="tasksButtons" buttonMinWidth="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="244.0">
+                    <buttons>
+                      <Button id="tasksAddButton" fx:id="tasksAddButton" mnemonicParsing="false" onAction="#onButtonPressed" text="+" />
+                        <Button id="tasksRemoveButton" fx:id="tasksRemoveButton" mnemonicParsing="false" onAction="#onButtonPressed" text="-" />
+                        <Button id="tasksEditButton" fx:id="tasksEditButton" mnemonicParsing="false" onAction="#onButtonPressed" text="e" />
+                    </buttons>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets right="68.0" />
+                     </padding>
+                  </ButtonBar>
+               </items>
+            </SplitPane>
+            <SplitPane id="detailsPane" dividerPositions="0.04" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                  <Label id="detailsLabel" prefHeight="30.0" text="Details" />
+                  <ScrollPane id="detailsPane" prefHeight="200.0" prefWidth="265.0" />
+              </items>
+            </SplitPane>
+            <SplitPane id="categoriesPane" dividerPositions="0.04" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+               <items>
+                  <Label id="categoriesLabel" prefHeight="30.0" text="Categories" />
+                  <ListView id="categoriesList" prefHeight="200.0" prefWidth="200.0" />
+               </items>
+            </SplitPane>
+        </items>
+      </SplitPane>
+      <Pane id="statusPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0">
+         <children>
+            <Label id="statusLabel" fx:id="statusLabel" disable="true" layoutX="10.0" layoutY="5.0" text="Status" />
+         </children>
+      </Pane>
+   </children>
+</VBox>
