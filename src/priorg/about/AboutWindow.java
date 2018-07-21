@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * @author Konstantin Kostin
+ */
 public class AboutWindow extends Application {
 
     @Override

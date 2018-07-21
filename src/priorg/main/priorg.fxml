@@ -11,6 +11,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -29,13 +30,17 @@
       </MenuBar>
       <SplitPane dividerPositions="0.25, 0.75" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="645.0" prefWidth="1000.0">
         <items>
-            <SplitPane id="tasksPane" dividerPositions="0.04, 0.93" orientation="VERTICAL">
+            <SplitPane id="tasksPane" dividerPositions="0.04, 0.5" orientation="VERTICAL">
                <items>
-                  <Label id="tasksLabel" prefHeight="30.0" text="Tasks" />
-                  <TreeView id="tasksTree" prefHeight="200.0" prefWidth="196.0" />
+                  <Label id="tasksLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Tasks" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TreeView fx:id="tasksList" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <ButtonBar id="tasksButtons" buttonMinWidth="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="244.0">
                     <buttons>
-                      <Button id="tasksAddButton" fx:id="tasksAddButton" mnemonicParsing="false" onAction="#onButtonPressed" text="+" />
+                      <Button id="tasksAddButton" fx:id="tasksAddButton" mnemonicParsing="false" onAction="#onTaskAddition" text="+" />
                         <Button id="tasksRemoveButton" fx:id="tasksRemoveButton" mnemonicParsing="false" onAction="#onButtonPressed" text="-" />
                         <Button id="tasksEditButton" fx:id="tasksEditButton" mnemonicParsing="false" onAction="#onButtonPressed" text="e" />
                     </buttons>
@@ -48,15 +53,15 @@
                   </ButtonBar>
                </items>
             </SplitPane>
-            <SplitPane id="detailsPane" dividerPositions="0.04" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+            <SplitPane id="detailsPane" dividerPositions="0.5" orientation="VERTICAL">
               <items>
-                  <Label id="detailsLabel" prefHeight="30.0" text="Details" />
+                  <Label id="detailsLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Details" />
                   <ScrollPane id="detailsPane" prefHeight="200.0" prefWidth="265.0" />
               </items>
             </SplitPane>
-            <SplitPane id="categoriesPane" dividerPositions="0.04" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+            <SplitPane id="categoriesPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                <items>
-                  <Label id="categoriesLabel" prefHeight="30.0" text="Categories" />
+                  <Label id="categoriesLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Categories" />
                   <ListView id="categoriesList" prefHeight="200.0" prefWidth="200.0" />
                </items>
             </SplitPane>
