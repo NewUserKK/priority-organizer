@@ -1,6 +1,6 @@
 package priorg.main.tasks;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author Konstantin Kostin
@@ -8,7 +8,7 @@ import java.util.Date;
 public class Task extends TaskItem {
 
     private int priority;
-    private Date deadline;
+    private LocalDate deadline;
 
     public Task(String name) {
         super(name);
@@ -18,7 +18,7 @@ public class Task extends TaskItem {
         this.priority = priority;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 

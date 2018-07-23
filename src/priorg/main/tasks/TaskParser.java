@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class TaskParser {
 
             String line;
             while ((line = taskReader.readLine()) != null) {
-                if (line.startsWith("#") || line.equals("")) {
+                if (DatabaseUtils.isComment(line) || line.equals("")) {
                     continue;
                 }
 
@@ -63,8 +64,7 @@ public class TaskParser {
         task.setParent(parentCategory);
         task.setPriority(Integer.parseInt(taskSplit[1]));
         task.setDescription(taskSplit[2]);
-        // TODO: proper date reading
-        task.setDeadline(new Date(0));
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        task.setDeadline(LocalDate.parse(taskSplit[3], formatter));
     }
 }

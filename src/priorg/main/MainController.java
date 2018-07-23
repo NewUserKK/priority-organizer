@@ -4,11 +4,14 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import priorg.about.AboutWindow;
 import priorg.main.tasks.Category;
 import priorg.main.tasks.TaskItem;
 import priorg.main.tasks.TaskParser;
+import priorg.main.tasks.TaskItemTreeCell;
 
 import java.io.*;
 import java.net.URL;
@@ -22,25 +25,28 @@ public class MainController implements Initializable {
     @FXML private Label statusLabel;
     @FXML private Button tasksAddButton;
     @FXML private TreeView<TaskItem> tasksList;
+//    @FXML private Text detailsText;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Category rootCategory = new Category("root");
-        new TaskParser(rootCategory).parse("src/priorg/main/tasks/db_sample.txt");
+        new TaskParser(rootCategory).parse(Config.TASK_DB_PATH.toString());
 
-        TreeItem<TaskItem> root = new TreeItem<>(rootCategory);
-        tasksList.setRoot(root);
+        TreeItem<TaskItem> rootItem = new TreeItem<>(rootCategory);
+        tasksList.setRoot(rootItem);
         for (TaskItem t: rootCategory.getSubItems()) {
-            dfs(t, root);
+            buildTree(t, rootItem);
         }
+
+        tasksList.setCellFactory((treeView) -> new TaskItemTreeCell());
     }
 
-    private void dfs(TaskItem node, TreeItem<TaskItem> root) {
+    private void buildTree(TaskItem node, TreeItem<TaskItem> rootItem) {
         TreeItem<TaskItem> nodeTreeItem = new TreeItem<>(node);
-        root.getChildren().add(nodeTreeItem);
+        rootItem.getChildren().add(nodeTreeItem);
         if (node instanceof Category) {
             for (TaskItem item: ((Category) node).getSubItems()) {
-                dfs(item, nodeTreeItem);
+                buildTree(item, nodeTreeItem);
             }
         }
     }
@@ -64,6 +70,10 @@ public class MainController implements Initializable {
 
     public void onTaskAddition(Event e) {
         onButtonPressed(e);
+    }
 
+    public void onMenuItemClick(Event e) {
+//        detailsText.setText(e.toString());
+        System.out.println(e.getSource());
     }
 }

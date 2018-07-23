@@ -1,5 +1,8 @@
 package priorg.main.tasks;
 
+import priorg.main.Config;
+
+
 /**
  * @author Konstantin Kostin
  */
@@ -17,8 +20,10 @@ public class TaskItem implements Comparable<TaskItem> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String newName) {
+        // TODO: check duplicates
+        new DatabaseUtils(Config.TASK_DB_PATH.toString()).renameTaskItem(name, newName);
+        this.name = newName;
     }
 
     public void setDescription(String description) {
