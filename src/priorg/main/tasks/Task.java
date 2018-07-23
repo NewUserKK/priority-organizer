@@ -22,4 +22,11 @@ public class Task extends TaskItem {
         this.deadline = deadline;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
 }

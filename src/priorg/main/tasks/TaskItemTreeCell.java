@@ -3,6 +3,7 @@ package priorg.main.tasks;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import priorg.main.MainController;
 
 
 /**
@@ -13,6 +14,7 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
     private TextField editField;
 
     public TaskItemTreeCell() {
+        setOnMouseReleased((e) -> MainController.currentItem = this.getItem());
     }
 
     @Override

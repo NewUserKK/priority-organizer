@@ -16,10 +16,6 @@ public class TaskItem implements Comparable<TaskItem> {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String newName) {
         // TODO: check duplicates
         new DatabaseUtils(Config.TASK_DB_PATH.toString()).renameTaskItem(name, newName);
@@ -32,6 +28,14 @@ public class TaskItem implements Comparable<TaskItem> {
 
     public void setParent(Category parent) {
         this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override
