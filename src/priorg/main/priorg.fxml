@@ -7,11 +7,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -37,7 +39,7 @@
                <content>
                   <SplitPane dividerPositions="0.25" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="645.0" prefWidth="1000.0">
                     <items>
-                        <SplitPane id="tasksPane" dividerPositions="0.04, 0.5" orientation="VERTICAL">
+                        <SplitPane id="tasksPane" dividerPositions="0.04, 0.96" orientation="VERTICAL">
                            <items>
                               <Label id="tasksLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Name" />
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -60,40 +62,68 @@
                               </ButtonBar>
                            </items>
                         </SplitPane>
-                        <SplitPane id="detailsPane" dividerPositions="0.5" orientation="VERTICAL">
+                        <SplitPane id="detailsPane" dividerPositions="0.04" orientation="VERTICAL">
                           <items>
-                              <Label id="detailsLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Details" />
-                              <TextFlow fx:id="detailsTextFlow" lineSpacing="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: ffffff;" visible="false">
+                              <TextFlow textAlignment="CENTER">
                                  <children>
-                                    <Text fx:id="taskItemNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Name: ">
-                                       <font>
-                                          <Font name="System Bold" size="13.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fx:id="taskItemName" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_name&#10;" />
-                                    <Text fx:id="taskItemPriorityLabel" layoutX="30.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Priority: ">
-                                       <font>
-                                          <Font name="System Bold" size="13.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fx:id="taskItemPriority" layoutX="82.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_priority&#10;" />
-                                    <Text fx:id="taskItemDeadlineLabel" layoutX="30.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deadline: ">
-                                       <font>
-                                          <Font name="System Bold" size="13.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fx:id="taskItemDeadline" layoutX="30.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_deadline&#10;" />
-                                    <Text fx:id="taskItemDescriptionLabel" layoutX="30.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:&#10;">
-                                       <font>
-                                          <Font name="System Bold" size="13.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fx:id="taskItemDescription" layoutX="30.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long example description" />
+                                    <Label id="detailsLabel" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Details" />
                                  </children>
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" top="20.0" />
-                                 </padding>
                               </TextFlow>
+                              <ScrollPane fx:id="detailsPane" pannable="true" style="-fx-background: ffffff;">
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <FlowPane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <TextFlow fx:id="detailsNameBlock">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name: ">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text fx:id="detailsName" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_name&#10;" />
+                                                   </children>
+                                                </TextFlow>
+                                                <TextFlow fx:id="detailsPriorityBlock">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Priority: ">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text fx:id="detailsPriority" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_priority&#10;" />
+                                                   </children>
+                                                </TextFlow>
+                                                <TextFlow fx:id="detailsDeadlineBlock">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deadline: ">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text fx:id="detailsDeadline" strokeType="OUTSIDE" strokeWidth="0.0" text="ex_deadline&#10;" />
+                                                   </children>
+                                                </TextFlow>
+                                                <TextFlow fx:id="detailsDescriptionBlock" lineSpacing="5.0">
+                                                   <children>
+                                                      <Text fx:id="taskItemDescriptionLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:&#10;">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text fx:id="detailsDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="example&#10;" />
+                                                   </children>
+                                                </TextFlow>
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="20.0" top="20.0" />
+                                             </padding>
+                                          </FlowPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
                           </items>
                         </SplitPane>
                     </items>

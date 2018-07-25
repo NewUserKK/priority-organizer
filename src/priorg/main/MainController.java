@@ -3,6 +3,7 @@ package priorg.main;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -60,40 +61,41 @@ public class MainController implements Initializable {
      * */
 
     public static TaskItem currentItem;
-    @FXML private TextFlow detailsTextFlow;
-    @FXML private Text taskItemName;
-    @FXML private Text taskItemPriority;
-    @FXML private Text taskItemPriorityLabel;
-    @FXML private Text taskItemDeadline;
-    @FXML private Text taskItemDeadlineLabel;
-    @FXML private Text taskItemDescription;
+    @FXML private ScrollPane detailsPane;
+    @FXML private TextFlow detailsNameBlock;
+    @FXML private TextFlow detailsPriorityBlock;
+    @FXML private TextFlow detailsDeadlineBlock;
+    @FXML private TextFlow detailsDescriptionBlock;
+    @FXML private Text detailsName;
+    @FXML private Text detailsPriority;
+    @FXML private Text detailsDeadline;
+    @FXML private Text detailsDescription;
 
     public void onMenuItemClick() {
-        // TODO: change to multiple panels (easier to change visibility)
         if (currentItem != null) {
-            detailsTextFlow.setVisible(true);
-            taskItemName.setText(currentItem.getName() + "\n");
-            taskItemDescription.setText(currentItem.getDescription() + "\n");
+            detailsPane.setVisible(true);
+            detailsName.setText(currentItem.getName() + "\n");
+            detailsDescription.setText(currentItem.getDescription() + "\n");
             displayProperties(currentItem);
         }
     }
 
     private void displayProperties(TaskItem item) {
         if (item instanceof Task) {
-            taskItemPriorityLabel.setVisible(true);
-            taskItemPriority.setVisible(true);
-            taskItemPriority.setText(String.valueOf(((Task) currentItem).getPriority()) + "\n");
+            setVisibility(true, detailsPriorityBlock, detailsDeadlineBlock);
 
-            taskItemDeadlineLabel.setVisible(true);
-            taskItemDeadline.setVisible(true);
-            taskItemDeadline.setText(((Task) currentItem).getDeadline().toString() + "\n");
+            detailsPriority.setText(String.valueOf(((Task) currentItem).getPriority()) + "\n");
+            detailsDeadline.setText(((Task) currentItem).getDeadline().toString() + "\n");
 
         } else if (item instanceof Category) {
-            taskItemPriorityLabel.setVisible(false);
-            taskItemPriority.setVisible(false);
+            setVisibility(false, detailsPriorityBlock, detailsDeadlineBlock);
+        }
+    }
 
-            taskItemDeadlineLabel.setVisible(false);
-            taskItemDeadline.setVisible(false);
+    private void setVisibility(boolean isVisible, Node ... items) {
+        for (Node item: items) {
+            item.setVisible(isVisible);
+            item.setManaged(isVisible);
         }
     }
 
