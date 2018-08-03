@@ -6,7 +6,7 @@ package priorg.main;
  * */
 public enum Config {
 
-    TASK_DB_PATH("src/priorg/main/tasks/db_sample.txt");
+    TASK_DB_PATH("db/db_sample.txt");
 
     private String value;
 

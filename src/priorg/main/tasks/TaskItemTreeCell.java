@@ -14,7 +14,7 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
     private TextField editField;
 
     public TaskItemTreeCell() {
-        setOnMouseReleased((e) -> MainController.currentItem = this.getItem());
+        setOnMouseReleased((e) -> MainController.currentTreeItem = this.getTreeItem());
     }
 
     @Override

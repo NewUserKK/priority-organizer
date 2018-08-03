@@ -69,7 +69,7 @@
                                     <Label id="detailsLabel" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" text="Details" />
                                  </children>
                               </TextFlow>
-                              <ScrollPane fx:id="detailsPane" pannable="true" style="-fx-background: ffffff;">
+                              <ScrollPane fx:id="detailsPane" pannable="true" style="-fx-background: ffffff;" visible="false">
                                  <content>
                                     <AnchorPane>
                                        <children>

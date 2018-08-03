@@ -1,8 +1,0 @@
-# Category 1 > Category 2 > ... > Category n > Task name | Task priority | Task description | Task deadline
-
-Cat1>Cat2>Cat3>Task1|1|Desc1|01.01.2018
-Cat1>Task2|2|Desc2|02.01.2018
-Cat1>Cat2>Task3|3|Desc3|03.01.2018
-Cat1>Cat2>Cat4>Task5|4|3|06.01.2401
-Uncategorized>Task4|4|Desc4|04.01.2018
-#Cat76

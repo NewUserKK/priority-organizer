@@ -10,6 +10,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import priorg.about.AboutWindow;
 import priorg.main.tasks.*;
+import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
 import java.net.URL;
@@ -20,6 +21,11 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
+    private TasksDatabase db;
+
+    public MainController() {
+        db = TasksDatabase.getInstance();
+    }
 
     /**
      * ============================
@@ -31,8 +37,8 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Category rootCategory = new Category("root");
-        new TaskParser(rootCategory).parse(Config.TASK_DB_PATH.toString());
+        Category rootCategory = new Category("root", true);
+        db.loadTree(rootCategory);
 
         TreeItem<TaskItem> rootItem = new TreeItem<>(rootCategory);
         tasksList.setRoot(rootItem);
@@ -60,7 +66,8 @@ public class MainController implements Initializable {
      * ==================
      * */
 
-    public static TaskItem currentItem;
+    public static TreeItem<TaskItem> currentTreeItem; // TODO: is set on TaskItemTreeCell. Make more obvious?
+
     @FXML private ScrollPane detailsPane;
     @FXML private TextFlow detailsNameBlock;
     @FXML private TextFlow detailsPriorityBlock;
@@ -72,7 +79,8 @@ public class MainController implements Initializable {
     @FXML private Text detailsDescription;
 
     public void onMenuItemClick() {
-        if (currentItem != null) {
+        if (currentTreeItem != null) {
+            TaskItem currentItem = currentTreeItem.getValue();
             detailsPane.setVisible(true);
             detailsName.setText(currentItem.getName() + "\n");
             detailsDescription.setText(currentItem.getDescription() + "\n");
@@ -84,8 +92,8 @@ public class MainController implements Initializable {
         if (item instanceof Task) {
             setVisibility(true, detailsPriorityBlock, detailsDeadlineBlock);
 
-            detailsPriority.setText(String.valueOf(((Task) currentItem).getPriority()) + "\n");
-            detailsDeadline.setText(((Task) currentItem).getDeadline().toString() + "\n");
+            detailsPriority.setText(String.valueOf(((Task) item).getPriority()) + "\n");
+            detailsDeadline.setText(((Task) item).getDeadline().toString() + "\n");
 
         } else if (item instanceof Category) {
             setVisibility(false, detailsPriorityBlock, detailsDeadlineBlock);
@@ -102,7 +110,7 @@ public class MainController implements Initializable {
 
     /**
      * =====================
-     * | Task list buttons |
+     * | Task list actions |
      * =====================
      * */
 
@@ -116,8 +124,28 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onTaskAddition(Event e) {
-        onButtonPressed(e);
+    public void onTaskAddition(Event event) {
+        onButtonPressed(event);
+
+        TaskItem currentItem = (currentTreeItem != null ? currentTreeItem.getValue() : null);
+        TreeItem<TaskItem> additionCell;
+        if (currentItem instanceof Category) {
+            additionCell = currentTreeItem;
+        } else if (currentItem instanceof Task) {
+            additionCell = currentTreeItem.getParent();
+        } else if (currentItem == null) {
+            additionCell = tasksList.getRoot();
+        } else {
+            throw new IllegalArgumentException("Unknown TaskItem descendant class");
+        }
+
+        TaskItem item = new TaskItem("new");
+        try {
+            ((Category) additionCell.getValue()).addItem(item);
+            additionCell.getChildren().add(new TreeItem<>(item));
+        } catch (DuplicateNameException e) {
+            System.err.println(e.getMessage() + " Name: " + item.getName());
+        }
     }
 
 
