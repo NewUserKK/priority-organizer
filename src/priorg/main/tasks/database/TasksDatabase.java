@@ -1,6 +1,6 @@
-package priorg.main.tasks;
+package priorg.main.tasks.database;
 
-import priorg.main.Config;
+import priorg.main.tasks.*;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ public class TasksDatabase implements AutoCloseable {
 
     private static TasksDatabase instance;
 
-    private final String DB_PATH = Config.TASK_DB_PATH.toString();
+    private final String DB_PATH = DatabasePaths.OLD_DB_FULL_PATH.toString();
     private final DatabaseFile dbFile = new DatabaseFile(DB_PATH);
 
     private Map<String, TaskItem> tasksMap;
@@ -168,10 +168,10 @@ public class TasksDatabase implements AutoCloseable {
     }
 
     private void renameFile() {
-        File oldDbFile = new File(Config.TASK_DB_PATH.toString());
-        File newDbFile = new File(Config.TASK_DB_PATH.toString() + ".tmp");
+        File oldDbFile = new File(DatabasePaths.OLD_DB_FULL_PATH.toString());
+        File newDbFile = new File(DatabasePaths.OLD_DB_FULL_PATH.toString() + ".tmp");
         if (oldDbFile.delete()) {
-            newDbFile.renameTo(new File(Config.TASK_DB_PATH.toString()));
+            newDbFile.renameTo(new File(DatabasePaths.OLD_DB_FULL_PATH.toString()));
         }
     }
 

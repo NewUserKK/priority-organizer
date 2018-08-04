@@ -1,7 +1,6 @@
 package priorg.main.tasks;
 
-import priorg.main.Config;
-import priorg.main.MainController;
+import priorg.main.tasks.database.TasksDatabase;
 
 
 /**

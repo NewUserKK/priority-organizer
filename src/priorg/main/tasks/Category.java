@@ -1,8 +1,7 @@
 package priorg.main.tasks;
 
-import priorg.main.Config;
+import priorg.main.tasks.database.TasksDatabase;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 

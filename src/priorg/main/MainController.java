@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import priorg.about.AboutWindow;
 import priorg.main.tasks.*;
-import sun.reflect.generics.tree.Tree;
+import priorg.main.tasks.database.TasksDatabase;
 
 import java.io.*;
 import java.net.URL;

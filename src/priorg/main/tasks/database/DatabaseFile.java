@@ -1,10 +1,7 @@
-package priorg.main.tasks;
-
-import priorg.main.Config;
+package priorg.main.tasks.database;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Collections;
 
 
 /**
@@ -50,28 +47,53 @@ public class DatabaseFile implements Closeable {
         } else if (mode.equals("a")) {
             openToAppend();
         } else {
-            throw new IllegalArgumentException("Unknown mode");
+            throw new IllegalArgumentException("Unknown file mode");
         }
     }
 
-    private void openToRead() throws IOException {
+    private void openToRead() {
         try {
             dbReader = new BufferedReader(new InputStreamReader(new FileInputStream(dbPath)));
             currentMode = READ;
 
         } catch (FileNotFoundException noDbFoundException) {
-            System.out.println("Failed to open existing db on path \"" + dbPath + "\", creating new");
-            System.out.println("New db file created on " + Config.TASK_DB_PATH);
-            File dbFile = new File(Config.TASK_DB_PATH.toString());
+            System.out.println("Failed to open existing db on path \"" + dbPath + "\"");
+            System.out.println("Attempting to create new db file on \"" + DatabasePaths.OLD_DB_FULL_PATH + "\"");
+
+            File dbDir = new File(DatabasePaths.DIRECTORY.toString());
             try {
-                if (!dbFile.createNewFile()) {
-                    System.err.println("Failed to create db, aborting");
-                    System.exit(1);
-                }
-            } catch (IOException fileCreationException) {
-                fileCreationException.printStackTrace();
-                System.err.println("Failed to create db, aborting");
+                createDirectory(dbDir);
+            } catch (IOException e) {
+                System.err.println(e.getMessage() + ", aborting");
                 System.exit(1);
+            }
+
+            File dbFile = new File(DatabasePaths.OLD_DB_FULL_PATH.toString());
+            try {
+                createFile(dbFile);
+            } catch (IOException e) {
+                System.err.println(e.getMessage() + ", aborting");
+                System.exit(1);
+            }
+        }
+    }
+
+    private void createDirectory(File dbDir) throws IOException {
+        if (!dbDir.exists()) {
+            if (dbDir.mkdirs()) {
+                System.out.println("Created directory " + dbDir.getName());
+            } else {
+                throw new IOException("Failed to create directory on " + dbDir.getName());
+            }
+        }
+    }
+
+    private void createFile(File dbFile) throws IOException {
+        if (!dbFile.exists()) {
+            if (dbFile.createNewFile()) {
+                System.out.println("Created db file " + dbFile.getName());
+            } else {
+                throw new IOException("Failed to create db file " + dbFile.getName());
             }
         }
     }
