@@ -1,6 +1,6 @@
 package priorg.main.tasks;
 
-import priorg.main.tasks.database.TasksDatabase;
+import priorg.main.tasks.database.CsvHandler;
 
 
 /**
@@ -26,7 +26,7 @@ public class TaskItem implements Comparable<TaskItem> {
 
     public void setName(String newName) {
         try {
-            TasksDatabase.getInstance().renameTaskItem(this, newName);
+            CsvHandler.getInstance().renameTaskItem(this, newName);
             this.name = newName;
         } catch (DuplicateNameException e) {
             System.err.println(e.getMessage());
@@ -39,6 +39,10 @@ public class TaskItem implements Comparable<TaskItem> {
 
     public void setParent(Category parent) {
         this.parent = parent;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

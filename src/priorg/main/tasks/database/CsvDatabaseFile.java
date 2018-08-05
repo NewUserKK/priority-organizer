@@ -1,25 +1,31 @@
 package priorg.main.tasks.database;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+
 import java.io.*;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
  * @author Konstantin Kostin
  * */
-public class DatabaseFile implements Closeable {
+public class CsvDatabaseFile implements Closeable {
 
-    public static final String CLOSED = "c";
     public static final String READ = "r";
     public static final String WRITE = "w";
     public static final String APPEND = "a";
 
-    private BufferedReader dbReader;
-    private PrintWriter dbWriter;
-    private String dbPath;
+    private static final String CLOSED = "c";
+
+    private CSVReader dbReader;
+    private CSVWriter dbWriter;
+    private DatabasePath dbPath;
+
     private String currentMode = CLOSED;
 
-    public DatabaseFile(String dbPath) {
+    public CsvDatabaseFile(DatabasePath dbPath) {
         this.dbPath = dbPath;
     }
 
@@ -53,14 +59,14 @@ public class DatabaseFile implements Closeable {
 
     private void openToRead() {
         try {
-            dbReader = new BufferedReader(new InputStreamReader(new FileInputStream(dbPath)));
+            dbReader = new CSVReader(new InputStreamReader(new FileInputStream(dbPath.getFullPath())));
             currentMode = READ;
 
         } catch (FileNotFoundException noDbFoundException) {
-            System.out.println("Failed to open existing db on path \"" + dbPath + "\"");
-            System.out.println("Attempting to create new db file on \"" + DatabasePaths.OLD_DB_FULL_PATH + "\"");
+            System.out.println("Failed to open existing db on path \"" + dbPath.getFullPath() + "\"");
+            System.out.println("Attempting to create new db file on \"" + dbPath.getFullPath() + "\"");
 
-            File dbDir = new File(DatabasePaths.DIRECTORY.toString());
+            File dbDir = new File(dbPath.getDirectory());
             try {
                 createDirectory(dbDir);
             } catch (IOException e) {
@@ -68,7 +74,7 @@ public class DatabaseFile implements Closeable {
                 System.exit(1);
             }
 
-            File dbFile = new File(DatabasePaths.OLD_DB_FULL_PATH.toString());
+            File dbFile = new File(dbPath.getFullPath());
             try {
                 createFile(dbFile);
             } catch (IOException e) {
@@ -100,34 +106,59 @@ public class DatabaseFile implements Closeable {
 
     private void openToWrite() throws IOException {
         try {
-            dbWriter = new PrintWriter(dbPath);
+            dbWriter = new CSVWriter(new BufferedWriter(new FileWriter(dbPath.getFullPath())));
             currentMode = WRITE;
 
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Unable to open or create db file: " + dbPath);
+            throw new FileNotFoundException("Unable to open or create db file: " + dbPath.getFullPath());
         }
     }
 
     private void openToAppend() throws IOException {
         try {
-            dbWriter = new PrintWriter(new BufferedWriter(new FileWriter(dbPath, true)));
+            dbWriter = new CSVWriter(new BufferedWriter(new FileWriter(dbPath.getFullPath(), true)));
             currentMode = APPEND;
 
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Unable to open db file: " + dbPath);
+            throw new FileNotFoundException("Unable to open db file: " + dbPath.getFullPath());
         }
     }
 
-    public String readLine() throws IOException {
+    /**
+     * ================
+     * | Read methods |
+     * ================
+     * */
+
+    public String[] readNext() throws IOException {
         ensureMode(READ);
-        return dbReader.readLine();
+        return dbReader.readNext();
     }
 
+    public List<String[]> readAll() throws IOException {
+        ensureMode(READ);
+        return dbReader.readAll();
+    }
 
-    public void println(String s) {
+    public void skip(int numberOfLines) throws IOException {
+        ensureMode(READ);
+        dbReader.skip(numberOfLines);
+    }
+
+    /**
+     * =================
+     * | Write methods |
+     * =================
+     * */
+
+    public void writeNext(String[] s) {
         ensureMode(WRITE, APPEND);
-        dbWriter.println(s);
-        dbWriter.flush();
+        dbWriter.writeNext(s);
+        try {
+            dbWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void ensureMode(String ... modes) {

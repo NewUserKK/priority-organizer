@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import priorg.main.tasks.database.CsvHandler;
 
 import java.io.IOException;
 
@@ -25,5 +26,10 @@ public class Priorg extends Application {
 
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        CsvHandler.getInstance().close();
     }
 }

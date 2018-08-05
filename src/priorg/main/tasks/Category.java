@@ -1,6 +1,6 @@
 package priorg.main.tasks;
 
-import priorg.main.tasks.database.TasksDatabase;
+import priorg.main.tasks.database.CsvHandler;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,11 +27,12 @@ public class Category extends TaskItem {
     }
 
     public void addItem(TaskItem item, boolean writeToDb) throws DuplicateNameException {
-        TasksDatabase.getInstance().checkDuplicates(item);
+        // TODO: move to abstract
+        CsvHandler.getInstance().checkDuplicates(item);
         subItems.add(item);
         item.setParent(this);
         if (writeToDb) {
-            TasksDatabase.getInstance().addEntry(item);
+            CsvHandler.getInstance().addEntry(item);
         }
     }
 

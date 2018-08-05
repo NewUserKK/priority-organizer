@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import priorg.about.AboutWindow;
 import priorg.main.tasks.*;
-import priorg.main.tasks.database.TasksDatabase;
+import priorg.main.tasks.database.CsvHandler;
 
 import java.io.*;
 import java.net.URL;
@@ -21,10 +21,10 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
-    private TasksDatabase db;
+    private CsvHandler db;
 
     public MainController() {
-        db = TasksDatabase.getInstance();
+        db = CsvHandler.getInstance();
     }
 
     /**

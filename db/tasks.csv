@@ -1,8 +1,8 @@
-ID,   Name,        Description,      Priority,   Deadline;
-1,    "First",     "Description1",   1,          "01.09.2018"
-2,    "Second",    "Description2",   2,          "02.09.2018"
-3,    "Third",     "Description3",   3,          "03.09.2018"
-4,    "Fourth",    "Description4",   4,          "04.09.2018"
-5,    "Fifth",     "Description5",   5,          "05.09.2018"
-6,    "Sixth",     "Description6",   6,          "06.09.2018"
-7,    "Seventh",   "Description7",   7,          "07.09.2018"
+ID,      Parent ID,       Name,           Description,      Priority,   Deadline
+1,       1,               "First",        "Description1",   1,          "01.09.2018"
+2,       1,               "Second",       "Description2",   2,          "02.09.2018"
+3,       1,               "Third",        "Description3",   3,          "03.09.2018"
+4,       2,               "Fourth",       "Description4",   4,          "04.09.2018"
+5,       3,               "Fifth",        "Description5",   5,          "05.09.2018"
+6,       4,               "Sixth",        "Description6",   6,          "06.09.2018"
+7,       5,               "Seventh",      "Description7",   7,          "07.09.2018"
