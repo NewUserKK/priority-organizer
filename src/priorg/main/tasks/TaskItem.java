@@ -25,12 +25,12 @@ public class TaskItem implements Comparable<TaskItem> {
     }
 
     public void setName(String newName) {
-        try {
-            CsvHandler.getInstance().renameTaskItem(this, newName);
+//        try {
+//            CsvHandler.getInstance().renameTaskItem(this, newName);
             this.name = newName;
-        } catch (DuplicateNameException e) {
-            System.err.println(e.getMessage());
-        }
+//        } catch (DuplicateNameException e) {
+//            System.err.println(e.getMessage());
+//        }
     }
 
     public void setDescription(String description) {

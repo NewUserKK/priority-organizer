@@ -51,7 +51,7 @@
                                 <buttons>
                                   <Button id="tasksAddButton" fx:id="tasksAddButton" mnemonicParsing="false" onAction="#onTaskAddition" text="+" />
                                     <Button id="tasksRemoveButton" fx:id="tasksRemoveButton" mnemonicParsing="false" onAction="#onButtonPressed" text="-" />
-                                    <Button id="tasksEditButton" fx:id="tasksEditButton" mnemonicParsing="false" onAction="#onButtonPressed" text="e" />
+                                    <Button id="tasksEditButton" fx:id="tasksEditButton" mnemonicParsing="false" onAction="#onEditButton" text="e" />
                                 </buttons>
                                  <opaqueInsets>
                                     <Insets />

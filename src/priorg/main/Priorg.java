@@ -30,6 +30,6 @@ public class Priorg extends Application {
 
     @Override
     public void stop() throws Exception {
-        CsvHandler.getInstance().close();
+//        CsvHandler.getInstance().close();
     }
 }

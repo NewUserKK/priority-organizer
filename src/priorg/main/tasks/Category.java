@@ -28,11 +28,11 @@ public class Category extends TaskItem {
 
     public void addItem(TaskItem item, boolean writeToDb) throws DuplicateNameException {
         // TODO: move to abstract
-        CsvHandler.getInstance().checkDuplicates(item);
+//        CsvHandler.getInstance().checkDuplicates(item);
         subItems.add(item);
         item.setParent(this);
         if (writeToDb) {
-            CsvHandler.getInstance().addEntry(item);
+//            CsvHandler.getInstance().addEntry(item);
         }
     }
 

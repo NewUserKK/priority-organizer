@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import priorg.about.AboutWindow;
+import priorg.buttons.AddEditWindow;
 import priorg.main.tasks.*;
 import priorg.main.tasks.database.CsvHandler;
 
@@ -24,7 +25,7 @@ public class MainController implements Initializable {
     private CsvHandler db;
 
     public MainController() {
-        db = CsvHandler.getInstance();
+//        db = CsvHandler.getInstance();
     }
 
     /**
@@ -38,7 +39,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Category rootCategory = new Category("root", true);
-        db.loadTree(rootCategory);
+//        db.loadTree(rootCategory);
 
         TreeItem<TaskItem> rootItem = new TreeItem<>(rootCategory);
         tasksList.setRoot(rootItem);
@@ -148,6 +149,15 @@ public class MainController implements Initializable {
         }
     }
 
+    public void onEditButton() {
+        try {
+            new AddEditWindow().start(new Stage());
+        } catch (Exception e) {
+            System.err.println("Error while starting edit window:");
+            System.err.println(e.getMessage());
+        }
+    }
+
 
     /**
      * ==============
@@ -159,6 +169,7 @@ public class MainController implements Initializable {
         try {
             new AboutWindow().start(new Stage());
         } catch (IOException e) {
+            System.err.println("Error while starting about window:");
             System.err.println(e.getMessage());
         }
     }
