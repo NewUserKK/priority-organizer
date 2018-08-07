@@ -10,18 +10,18 @@ import java.util.Map;
 /**
  * @author Konstantin Kostin
  * */
-public abstract class CsvHandler implements AutoCloseable {
+public abstract class CsvHandler<T extends Identifiable> implements AutoCloseable {
 
-    private static int itemCounter;
+    private int itemCounter = 0;
+    private int idCounter = 0;
 
     private CsvDatabaseFile dbFile;
-    private Map<Integer, TaskItem> items;
+    private Map<Id, T> items;
 
     protected CsvHandler(DatabasePath dbPath) {
         this.dbFile = new CsvDatabaseFile(dbPath);
         this.items = new HashMap<>();
         openDbFile(CsvDatabaseFile.READ);
-        buildMap();
     }
 
     private void openDbFile(String mode) {
@@ -47,8 +47,10 @@ public abstract class CsvHandler implements AutoCloseable {
 
             String[] line;
             while ((line = dbFile.readNext()) != null) {
-                TaskItem parsedItem = parseItem(line);
+                T parsedItem = parseItem(line);
                 items.put(parsedItem.getId(), parsedItem);
+                itemCounter++;
+                idCounter++;
             }
 
         } catch (IOException e) {
@@ -57,15 +59,25 @@ public abstract class CsvHandler implements AutoCloseable {
         }
     }
 
-    public TaskItem parseItem(String[] line) {
-        itemCounter++;
+    public T parseItem(String[] line) {
         return parseItemImpl(line);
     }
 
-    protected abstract TaskItem parseItemImpl(String[] line);
+    protected abstract T parseItemImpl(String[] line);
 
-    public Map<Integer, TaskItem> getItemsMap() {
+    public Map<Id, T> getItemsMap() {
+        if (items == null) {
+            buildMap();
+        }
         return items;
+    }
+
+    public int getItemCounter() {
+        return itemCounter;
+    }
+
+    public int getNextId() {
+        return idCounter;
     }
 
     /**
@@ -74,11 +86,11 @@ public abstract class CsvHandler implements AutoCloseable {
      * =================
      * */
 
-    public void renameTaskItem(TaskItem item, String newName) throws DuplicateNameException {
-        checkDuplicates(item);
+    public void renameTaskItem(T item, String newName) {
+//        checkDuplicates(item);
         openDbFile(CsvDatabaseFile.READ);
 
-        String oldName = item.getName();
+//        String oldName = item.getName();
     }
 
     /**
@@ -87,8 +99,8 @@ public abstract class CsvHandler implements AutoCloseable {
      * =================
      * */
 
-    public void addEntry(TaskItem newItem) throws DuplicateNameException {
-        checkDuplicates(newItem);
+    public void addEntry(T newItem) {
+//        checkDuplicates(newItem);
         openDbFile(CsvDatabaseFile.APPEND);
     }
 
@@ -99,11 +111,15 @@ public abstract class CsvHandler implements AutoCloseable {
      * =========
      * */
 
-    public void checkDuplicates(TaskItem item) throws DuplicateNameException {
-        if (items.containsKey(item.getId())) {
-            throw new DuplicateNameException("Task or category already exists!");
-        }
-    }
+//    public void checkDuplicates(T item) throws DuplicateItemException {
+//        checkDuplicates(item.getId());
+//    }
+//
+//    public void checkDuplicates(int id) throws DuplicateItemException {
+//        if (items.containsKey(id)) {
+//            throw new DuplicateItemException("Item with that id already exists!");
+//        }
+//    }
 
     @Override
     public void close() throws IOException {

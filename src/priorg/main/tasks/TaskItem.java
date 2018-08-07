@@ -1,25 +1,36 @@
 package priorg.main.tasks;
 
-import priorg.main.tasks.database.CsvHandler;
+import com.opencsv.bean.CsvBindByName;
+import priorg.main.tasks.database.CsvCategoryHandler;
 
 
 /**
  * @author Konstantin Kostin
  */
-public class TaskItem implements Comparable<TaskItem> {
+public class TaskItem implements Comparable<TaskItem>, Identifiable {
 
-    private Category parent;
+    @CsvBindByName(column = "Parent ID")
+    private Id parent;
+
+    @CsvBindByName(column = "Name")
     private String name;
+
+    @CsvBindByName(column = "Description")
     private String description;
-    private int id; // TODO: id
+
+    @CsvBindByName(column = "ID")
+    private Id id;
 
     private boolean root = false;
 
-    public TaskItem(String name) {
+
+    public TaskItem(Id id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public TaskItem(String name, boolean isRoot) {
+    public TaskItem(Id id, String name, boolean isRoot) {
+        this.id = id;
         this.name = name;
         this.root = isRoot;
     }
@@ -28,7 +39,7 @@ public class TaskItem implements Comparable<TaskItem> {
 //        try {
 //            CsvHandler.getInstance().renameTaskItem(this, newName);
             this.name = newName;
-//        } catch (DuplicateNameException e) {
+//        } catch (DuplicateItemException e) {
 //            System.err.println(e.getMessage());
 //        }
     }
@@ -37,11 +48,11 @@ public class TaskItem implements Comparable<TaskItem> {
         this.description = description;
     }
 
-    public void setParent(Category parent) {
+    public void setParent(Id parent) {
         this.parent = parent;
     }
 
-    public int getId() {
+    public Id getId() {
         return id;
     }
 
@@ -54,7 +65,7 @@ public class TaskItem implements Comparable<TaskItem> {
     }
 
     public Category getParent() {
-        return parent;
+        return CsvCategoryHandler.getInstance().getItemsMap().get(parent);
     }
 
     public boolean isRoot() {

@@ -1,5 +1,7 @@
 package priorg.main.tasks;
 
+import com.opencsv.bean.CsvBindByName;
+
 import java.time.LocalDate;
 
 /**
@@ -7,11 +9,14 @@ import java.time.LocalDate;
  */
 public class Task extends TaskItem {
 
+    @CsvBindByName(column = "Priority")
     private int priority;
+
+    @CsvBindByName(column = "Deadline")
     private LocalDate deadline;
 
-    public Task(String name) {
-        super(name);
+    public Task(Id id, String name) {
+        super(id, name);
     }
 
     public void setPriority(int priority) {

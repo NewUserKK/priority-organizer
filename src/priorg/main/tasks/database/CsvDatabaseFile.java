@@ -2,6 +2,8 @@ package priorg.main.tasks.database;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBeanBuilder;
+import priorg.main.tasks.Category;
 
 import java.io.*;
 import java.util.Arrays;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * @author Konstantin Kostin
  * */
-public class CsvDatabaseFile implements Closeable {
+public class CsvDatabaseFile<T> implements Closeable {
 
     public static final String READ = "r";
     public static final String WRITE = "w";
@@ -133,6 +135,7 @@ public class CsvDatabaseFile implements Closeable {
     public String[] readNext() throws IOException {
         ensureMode(READ);
         return dbReader.readNext();
+
     }
 
     public List<String[]> readAll() throws IOException {

@@ -12,6 +12,7 @@ import priorg.about.AboutWindow;
 import priorg.buttons.AddEditWindow;
 import priorg.main.tasks.*;
 import priorg.main.tasks.database.CsvHandler;
+import priorg.main.tasks.database.CsvTaskHandler;
 
 import java.io.*;
 import java.net.URL;
@@ -144,7 +145,7 @@ public class MainController implements Initializable {
         try {
             ((Category) additionCell.getValue()).addItem(item);
             additionCell.getChildren().add(new TreeItem<>(item));
-        } catch (DuplicateNameException e) {
+        } catch (DuplicateItemException e) {
             System.err.println(e.getMessage() + " Name: " + item.getName());
         }
     }
