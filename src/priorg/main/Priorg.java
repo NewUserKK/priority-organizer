@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import priorg.main.tasks.database.CsvCategoryHandler;
 import priorg.main.tasks.database.CsvHandler;
+import priorg.main.tasks.database.CsvTaskHandler;
 
 import java.io.IOException;
 
@@ -30,6 +32,7 @@ public class Priorg extends Application {
 
     @Override
     public void stop() throws Exception {
-//        CsvHandler.getInstance().close();
+        CsvCategoryHandler.getInstance().close();
+        CsvTaskHandler.getInstance().close();
     }
 }

@@ -38,12 +38,7 @@ public class TaskItem implements Comparable<TaskItem>, Identifiable {
     }
 
     public void setName(String newName) {
-//        try {
-//            CsvHandler.getInstance().renameTaskItem(this, newName);
-            this.name = newName;
-//        } catch (DuplicateItemException e) {
-//            System.err.println(e.getMessage());
-//        }
+        this.name = newName;
     }
 
     public void setDescription(String description) {

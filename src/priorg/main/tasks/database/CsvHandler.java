@@ -112,15 +112,6 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
      * =========
      * */
 
-//    public void checkDuplicates(T item) throws DuplicateItemException {
-//        checkDuplicates(item.getId());
-//    }
-//
-//    public void checkDuplicates(int id) throws DuplicateItemException {
-//        if (items.containsKey(id)) {
-//            throw new DuplicateItemException("Item with that id already exists!");
-//        }
-//    }
 
     @Override
     public void close() throws IOException {

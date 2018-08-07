@@ -34,6 +34,7 @@ public class CsvCategoryHandler extends CsvHandler<TaskItem> {
         Category cat = new Category(id, name);
         cat.setDescription(description);
         cat.setParentId(parentId);
+
         if (!subCats.isEmpty()) {
             for (String subCat: subCats.split(" ")) {
                 cat.addCategoryById(new Id<>(Integer.parseInt(subCat), TaskItem.class));

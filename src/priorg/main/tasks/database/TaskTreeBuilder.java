@@ -30,7 +30,6 @@ public class TaskTreeBuilder {
     public TreeItem<TaskItem> loadTree() {
         TreeItem<TaskItem> root = new TreeItem<>(
                 new Category(new Id<>(-1, TaskItem.class), "TREE_ROOT"));
-//        categoryMap.put(root.getValue().getId(), root);
 
         for (TreeItem<TaskItem> categoryItem: categoryMap.values()) {
             Category category = (Category) categoryItem.getValue();

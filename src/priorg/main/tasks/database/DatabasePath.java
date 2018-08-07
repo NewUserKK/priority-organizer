@@ -8,10 +8,6 @@ import java.io.File;
  * */
 public enum DatabasePath {
 
-//    DB_DIRECTORY("db"),
-//    OLD_DB_FILE("db_sample.txt"),
-//    OLD_DB_FULL_PATH("db/db_sample.txt"),
-
     TASKS("db/tasks.csv"),
     CATEGORIES("db/categories.csv");
 

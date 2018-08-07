@@ -49,25 +49,12 @@ public class Category extends TaskItem {
 
 
     public void addItem(TaskItem item) {
-        addItem(item, true);
-    }
-
-    public void addItem(TaskItem item, boolean writeToDb) {
         // TODO: move to abstract?
-//        CsvCategoryHandler.getInstance().checkDuplicates(item);
         if (item instanceof Category) {
             subCategories.add(item.getId());
         } else {
             subTasks.add(item.getId());
         }
 //        item.setParentId(this);
-        if (writeToDb) {
-//            CsvHandler.getInstance().addEntry(item);
-        }
     }
-
-//    public Set<TaskItem> getSubItems() {
-//        return subItems;
-//    }
-
 }

@@ -24,10 +24,7 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
-    private CsvHandler db;
-
     public MainController() {
-//        db = CsvHandler.getInstance();
     }
 
     /**
@@ -40,28 +37,10 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        Category rootCategory = new Category("root", true);
-//        db.loadTree(rootCategory);
-
         TreeItem<TaskItem> rootItem = new TaskTreeBuilder().loadTree();
         tasksList.setRoot(rootItem);
-//        for (TaskItem t: rootItem.getValue().getSubItems()) {
-//            buildTree(t, rootItem);
-//        }
-
         tasksList.setCellFactory((treeView) -> new TaskItemTreeCell());
     }
-
-//    private void buildTree(TaskItem node, TreeItem<TaskItem> rootItem) {
-//        TreeItem<TaskItem> nodeTreeItem = new TreeItem<>(node);
-//        rootItem.getChildren().add(nodeTreeItem);
-//        if (node instanceof Category) {
-//            for (TaskItem item: ((Category) node).getSubItems()) {
-//                buildTree(item, nodeTreeItem);
-//            }
-//        }
-//    }
-
 
     /**
      * ==================
