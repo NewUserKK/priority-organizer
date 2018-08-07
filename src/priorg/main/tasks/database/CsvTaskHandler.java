@@ -1,14 +1,16 @@
 package priorg.main.tasks.database;
 
 
-import priorg.main.tasks.Id;
+import priorg.main.Id;
+import priorg.main.tasks.Category;
 import priorg.main.tasks.Task;
+import priorg.main.tasks.TaskItem;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class CsvTaskHandler extends CsvHandler<Task> {
+public class CsvTaskHandler extends CsvHandler<TaskItem> {
 
     private static CsvTaskHandler instance;
 
@@ -26,15 +28,15 @@ public class CsvTaskHandler extends CsvHandler<Task> {
     @Override
     protected Task parseItemImpl(String[] line) {
         // TODO: rewrite to opencsv annotations
-        Id id = new Id(Integer.parseInt(line[0]));
-        Id parentId = new Id(Integer.parseInt(line[1]));
+        Id<TaskItem> id = new Id<>(Integer.parseInt(line[0]), TaskItem.class);
+        Id<TaskItem> parentId = new Id<>(Integer.parseInt(line[1]), TaskItem.class);
         String name = line[2];
         String description = line[3];
         int priority = Integer.parseInt(line[4]);
         LocalDate deadline = extractDate(line[5]);
 
         Task task = new Task(id, name);
-        task.setParent(parentId);
+        task.setParentId(parentId);
         task.setDescription(description);
         task.setDeadline(deadline);
         task.setPriority(priority);

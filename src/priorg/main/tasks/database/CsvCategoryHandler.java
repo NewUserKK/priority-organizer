@@ -2,9 +2,11 @@ package priorg.main.tasks.database;
 
 
 import priorg.main.tasks.Category;
-import priorg.main.tasks.Id;
+import priorg.main.Id;
+import priorg.main.tasks.Task;
+import priorg.main.tasks.TaskItem;
 
-public class CsvCategoryHandler extends CsvHandler<Category> {
+public class CsvCategoryHandler extends CsvHandler<TaskItem> {
 
     private static CsvCategoryHandler instance;
 
@@ -22,8 +24,8 @@ public class CsvCategoryHandler extends CsvHandler<Category> {
     @Override
     protected Category parseItemImpl(String[] line) {
         // TODO: rewrite to opencsv annotations
-        Id id = new Id(Integer.parseInt(line[0]));
-        Id parentId = new Id(Integer.parseInt(line[1]));
+        Id<TaskItem> id = new Id<>(Integer.parseInt(line[0]), TaskItem.class);
+        Id<TaskItem> parentId = new Id<>(Integer.parseInt(line[1]), TaskItem.class);
         String name = line[2];
         String description = line[3];
         String subCats = line[4];
@@ -31,13 +33,19 @@ public class CsvCategoryHandler extends CsvHandler<Category> {
 
         Category cat = new Category(id, name);
         cat.setDescription(description);
-        cat.setParent(parentId);
-        for (String subCat: subCats.split(",")) {
-            cat.addCategoryById(new Id(Integer.parseInt(subCat)));
+        cat.setParentId(parentId);
+        if (!subCats.isEmpty()) {
+            for (String subCat: subCats.split(" ")) {
+                cat.addCategoryById(new Id<>(Integer.parseInt(subCat), TaskItem.class));
+            }
         }
-        for (String subTask: subTasks.split(",")) {
-            cat.addTaskById(new Id(Integer.parseInt(subTask)));
+
+        if (!subTasks.isEmpty()) {
+            for (String subTask: subTasks.split(" ")) {
+                cat.addTaskById(new Id<>(Integer.parseInt(subTask), TaskItem.class));
+            }
         }
+
         return cat;
     }
 

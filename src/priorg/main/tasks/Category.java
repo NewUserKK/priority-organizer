@@ -1,8 +1,10 @@
 package priorg.main.tasks;
 
+import priorg.main.Id;
 import priorg.main.tasks.database.CsvCategoryHandler;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,8 +13,8 @@ import java.util.TreeSet;
  */
 public class Category extends TaskItem {
 
-    private Set<Id> subCategories = new TreeSet<>();
-    private Set<Id> subTasks = new TreeSet<>();
+    private Set<Id> subCategories = new HashSet<>();
+    private Set<Id> subTasks = new HashSet<>();
 
 
     public Category(Id id, String name) {
@@ -58,7 +60,7 @@ public class Category extends TaskItem {
         } else {
             subTasks.add(item.getId());
         }
-//        item.setParent(this);
+//        item.setParentId(this);
         if (writeToDb) {
 //            CsvHandler.getInstance().addEntry(item);
         }

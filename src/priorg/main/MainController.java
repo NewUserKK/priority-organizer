@@ -13,6 +13,7 @@ import priorg.buttons.AddEditWindow;
 import priorg.main.tasks.*;
 import priorg.main.tasks.database.CsvHandler;
 import priorg.main.tasks.database.CsvTaskHandler;
+import priorg.main.tasks.database.TaskTreeBuilder;
 
 import java.io.*;
 import java.net.URL;
@@ -39,27 +40,27 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Category rootCategory = new Category("root", true);
+//        Category rootCategory = new Category("root", true);
 //        db.loadTree(rootCategory);
 
-        TreeItem<TaskItem> rootItem = new TreeItem<>(rootCategory);
+        TreeItem<TaskItem> rootItem = new TaskTreeBuilder().loadTree();
         tasksList.setRoot(rootItem);
-        for (TaskItem t: rootCategory.getSubItems()) {
-            buildTree(t, rootItem);
-        }
+//        for (TaskItem t: rootItem.getValue().getSubItems()) {
+//            buildTree(t, rootItem);
+//        }
 
         tasksList.setCellFactory((treeView) -> new TaskItemTreeCell());
     }
 
-    private void buildTree(TaskItem node, TreeItem<TaskItem> rootItem) {
-        TreeItem<TaskItem> nodeTreeItem = new TreeItem<>(node);
-        rootItem.getChildren().add(nodeTreeItem);
-        if (node instanceof Category) {
-            for (TaskItem item: ((Category) node).getSubItems()) {
-                buildTree(item, nodeTreeItem);
-            }
-        }
-    }
+//    private void buildTree(TaskItem node, TreeItem<TaskItem> rootItem) {
+//        TreeItem<TaskItem> nodeTreeItem = new TreeItem<>(node);
+//        rootItem.getChildren().add(nodeTreeItem);
+//        if (node instanceof Category) {
+//            for (TaskItem item: ((Category) node).getSubItems()) {
+//                buildTree(item, nodeTreeItem);
+//            }
+//        }
+//    }
 
 
     /**
@@ -141,13 +142,13 @@ public class MainController implements Initializable {
             throw new IllegalArgumentException("Unknown TaskItem descendant class");
         }
 
-        TaskItem item = new TaskItem("new");
-        try {
-            ((Category) additionCell.getValue()).addItem(item);
-            additionCell.getChildren().add(new TreeItem<>(item));
-        } catch (DuplicateItemException e) {
-            System.err.println(e.getMessage() + " Name: " + item.getName());
-        }
+//        TaskItem item = new TaskItem("new");
+//        try {
+//            ((Category) additionCell.getValue()).addItem(item);
+//            additionCell.getChildren().add(new TreeItem<>(item));
+//        } catch (DuplicateItemException e) {
+//            System.err.println(e.getMessage() + " Name: " + item.getName());
+//        }
     }
 
     public void onEditButton() {

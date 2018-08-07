@@ -12,8 +12,8 @@ public enum DatabasePath {
 //    OLD_DB_FILE("db_sample.txt"),
 //    OLD_DB_FULL_PATH("db/db_sample.txt"),
 
-    TASKS("tasks.csv"),
-    CATEGORIES("categories.csv");
+    TASKS("db/tasks.csv"),
+    CATEGORIES("db/categories.csv");
 
     private String fullPath;
     private String directory;

@@ -1,6 +1,8 @@
 package priorg.main.tasks;
 
 import com.opencsv.bean.CsvBindByName;
+import priorg.main.Id;
+import priorg.main.Identifiable;
 import priorg.main.tasks.database.CsvCategoryHandler;
 
 
@@ -10,7 +12,7 @@ import priorg.main.tasks.database.CsvCategoryHandler;
 public class TaskItem implements Comparable<TaskItem>, Identifiable {
 
     @CsvBindByName(column = "Parent ID")
-    private Id parent;
+    private Id parentId;
 
     @CsvBindByName(column = "Name")
     private String name;
@@ -48,8 +50,8 @@ public class TaskItem implements Comparable<TaskItem>, Identifiable {
         this.description = description;
     }
 
-    public void setParent(Id parent) {
-        this.parent = parent;
+    public void setParentId(Id parentId) {
+        this.parentId = parentId;
     }
 
     public Id getId() {
@@ -64,8 +66,8 @@ public class TaskItem implements Comparable<TaskItem>, Identifiable {
         return description;
     }
 
-    public Category getParent() {
-        return CsvCategoryHandler.getInstance().getItemsMap().get(parent);
+    public Id getParentId() {
+        return CsvCategoryHandler.getInstance().getItemsMap().get(parentId).getId();
     }
 
     public boolean isRoot() {

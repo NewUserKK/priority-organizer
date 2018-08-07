@@ -1,4 +1,4 @@
-package priorg.main.tasks;
+package priorg.main;
 
 public interface Identifiable {
 

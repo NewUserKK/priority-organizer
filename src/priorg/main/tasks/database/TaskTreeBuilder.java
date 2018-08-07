@@ -2,18 +2,17 @@ package priorg.main.tasks.database;
 
 import javafx.scene.control.TreeItem;
 import priorg.main.tasks.Category;
-import priorg.main.tasks.Id;
-import priorg.main.tasks.Task;
+import priorg.main.Id;
 import priorg.main.tasks.TaskItem;
-import sun.reflect.generics.tree.Tree;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class TaskTreeBuilder {
 
-    private final Map<Id, TreeItem<Category>> categoryMap;
-    private final Map<Id, TreeItem<Task>> taskMap;
+    private final Map<Id, TreeItem<TaskItem>> categoryMap;
+    private final Map<Id, TreeItem<TaskItem>> taskMap;
 
     public TaskTreeBuilder() {
         categoryMap = convertToTreeItem(CsvCategoryHandler.getInstance().getItemsMap());
@@ -21,7 +20,7 @@ public class TaskTreeBuilder {
     }
 
     private<T extends TaskItem> Map<Id, TreeItem<T>> convertToTreeItem(Map<Id, T> map) {
-        Map<Id, TreeItem<T>> treeItemMap = new TreeMap<>();
+        Map<Id, TreeItem<T>> treeItemMap = new HashMap<>();
         for (T item: map.values()) {
             treeItemMap.put(item.getId(), new TreeItem<>(item));
         }
@@ -29,10 +28,16 @@ public class TaskTreeBuilder {
     }
 
     public TreeItem<TaskItem> loadTree() {
-        TreeItem<TaskItem> root = new TreeItem<>(new Category(new Id(-1), "TREE_ROOT"));
+        TreeItem<TaskItem> root = new TreeItem<>(
+                new Category(new Id<>(-1, TaskItem.class), "TREE_ROOT"));
+//        categoryMap.put(root.getValue().getId(), root);
 
-        for (TreeItem<Category> categoryItem: categoryMap.values()) {
-            Category category = categoryItem.getValue();
+        for (TreeItem<TaskItem> categoryItem: categoryMap.values()) {
+            Category category = (Category) categoryItem.getValue();
+
+            if (category.getParentId().equals(root.getValue().getId())) {
+                root.getChildren().add(categoryItem);
+            }
 
             for (Id subCatId: category.getSubCategories()) {
                 categoryItem.getChildren().add(categoryMap.get(subCatId));

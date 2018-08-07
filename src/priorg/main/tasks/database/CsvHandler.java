@@ -1,6 +1,7 @@
 package priorg.main.tasks.database;
 
-import priorg.main.tasks.*;
+import priorg.main.Id;
+import priorg.main.Identifiable;
 
 import java.io.*;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
 
     protected CsvHandler(DatabasePath dbPath) {
         this.dbFile = new CsvDatabaseFile(dbPath);
-        this.items = new HashMap<>();
         openDbFile(CsvDatabaseFile.READ);
     }
 
@@ -41,6 +41,7 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
 
     private void buildMap() {
         openDbFile(CsvDatabaseFile.READ);
+        this.items = new HashMap<>();
 
         try {
             dbFile.skip(1);
