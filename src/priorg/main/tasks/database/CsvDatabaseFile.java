@@ -18,11 +18,13 @@ public class CsvDatabaseFile<T> implements Closeable {
     public static final String READ = "r";
     public static final String WRITE = "w";
     public static final String APPEND = "a";
+    public static final String EDIT = "e";
 
     private static final String CLOSED = "c";
 
     private CSVReader dbReader;
     private CSVWriter dbWriter;
+    private CSVWriter tempDbWriter;
     private DatabasePath dbPath;
 
     private String currentMode = CLOSED;
@@ -48,14 +50,21 @@ public class CsvDatabaseFile<T> implements Closeable {
             e.printStackTrace();
         }
 
-        if (mode.equals("r")) {
-            openToRead();
-        } else if (mode.equals("w")) {
-            openToWrite();
-        } else if (mode.equals("a")) {
-            openToAppend();
-        } else {
-            throw new IllegalArgumentException("Unknown file mode");
+        switch (mode) {
+            case READ:
+                openToRead();
+                break;
+            case WRITE:
+                openToWrite();
+                break;
+            case APPEND:
+                openToAppend();
+                break;
+            case EDIT:
+                openToEdit();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown file mode");
         }
     }
 
@@ -86,33 +95,17 @@ public class CsvDatabaseFile<T> implements Closeable {
         }
     }
 
-    private void createDirectory(File dbDir) throws IOException {
-        if (!dbDir.exists()) {
-            if (dbDir.mkdirs()) {
-                System.out.println("Created directory " + dbDir.getName());
-            } else {
-                throw new IOException("Failed to create directory on " + dbDir.getName());
-            }
-        }
-    }
-
-    private void createFile(File dbFile) throws IOException {
-        if (!dbFile.exists()) {
-            if (dbFile.createNewFile()) {
-                System.out.println("Created db file " + dbFile.getName());
-            } else {
-                throw new IOException("Failed to create db file " + dbFile.getName());
-            }
-        }
-    }
-
     private void openToWrite() throws IOException {
+        openToWrite(false);
+    }
+
+    private void openToWrite(boolean tmp) throws IOException {
         try {
-            dbWriter = new CSVWriter(new BufferedWriter(new FileWriter(dbPath.getFullPath())));
+            dbWriter = new CSVWriter(new BufferedWriter(new FileWriter(dbPath.getFullPath(tmp))));
             currentMode = WRITE;
 
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Unable to open or create db file: " + dbPath.getFullPath());
+            throw new FileNotFoundException("Unable to open or create db file: " + dbPath.getFullPath(tmp));
         }
     }
 
@@ -126,6 +119,12 @@ public class CsvDatabaseFile<T> implements Closeable {
         }
     }
 
+    private void openToEdit() throws IOException {
+        openToRead();
+        openToWrite(true);
+        currentMode = EDIT;
+    }
+
     /**
      * ================
      * | Read methods |
@@ -133,18 +132,18 @@ public class CsvDatabaseFile<T> implements Closeable {
      * */
 
     public String[] readNext() throws IOException {
-        ensureMode(READ);
+        ensureMode(READ, EDIT);
         return dbReader.readNext();
 
     }
 
     public List<String[]> readAll() throws IOException {
-        ensureMode(READ);
+        ensureMode(READ, EDIT);
         return dbReader.readAll();
     }
 
     public void skip(int numberOfLines) throws IOException {
-        ensureMode(READ);
+        ensureMode(READ, EDIT);
         dbReader.skip(numberOfLines);
     }
 
@@ -154,15 +153,17 @@ public class CsvDatabaseFile<T> implements Closeable {
      * =================
      * */
 
-    public void writeNext(String[] s) {
-        ensureMode(WRITE, APPEND);
+    public void writeNext(String[] s) throws IOException {
+        ensureMode(WRITE, APPEND, EDIT);
         dbWriter.writeNext(s);
-        try {
-            dbWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dbWriter.flush();
     }
+
+    /**
+     * =========
+     * | Utils |
+     * =========
+     * */
 
     private void ensureMode(String ... modes) {
         for (String mode: modes) {
@@ -174,6 +175,41 @@ public class CsvDatabaseFile<T> implements Closeable {
                 "Current: " + currentMode + ", needed one of those: " + Arrays.toString(modes));
     }
 
+    private void createDirectory(File dir) throws IOException {
+        if (!dir.exists()) {
+            if (dir.mkdirs()) {
+                System.out.println("Created directory " + dir.getName());
+            } else {
+                throw new IOException("Failed to create directory on " + dir.getName());
+            }
+        }
+    }
+
+    private void createFile(File file) throws IOException {
+        if (!file.exists()) {
+            if (file.createNewFile()) {
+                System.out.println("Created file " + file.getName());
+            } else {
+                throw new IOException("Failed to create file " + file.getName());
+            }
+        }
+    }
+
+    private void removeFile(File file) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("File " + file.getName() + " not found");
+        }
+        if (!file.delete()) {
+            throw new IOException("Failed to remove file: " + file.getName());
+        }
+    }
+
+    private void renameFile(File file, String newName) throws IOException {
+        if (!file.renameTo(new File(file.getParent(), newName))) {
+            throw new IOException("Failed to rename file: " + file.getName() + " to: " + newName);
+        }
+    }
+
     @Override
     public void close() throws IOException {
         if (dbReader != null) {
@@ -181,6 +217,9 @@ public class CsvDatabaseFile<T> implements Closeable {
         }
         if (dbWriter != null) {
             dbWriter.close();
+        }
+        if (currentMode.equals(EDIT)) {
+            renameFile(new File(dbPath.getFullPath(true)), dbPath.getName());
         }
         currentMode = CLOSED;
     }

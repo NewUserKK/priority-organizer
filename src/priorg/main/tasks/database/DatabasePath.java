@@ -14,11 +14,13 @@ public enum DatabasePath {
     private String fullPath;
     private String directory;
     private String name;
+    private String tempName;
 
     DatabasePath(String fullPath) {
         this.fullPath = fullPath;
         this.directory = parseDirectoryPath(fullPath);
         this.name = parseFileName(fullPath);
+        this.tempName = name + ".tmp";
     }
 
     private String parseDirectoryPath(String fullPath) {
@@ -36,16 +38,23 @@ public enum DatabasePath {
     }
 
     public String getFullPath() {
-        return fullPath;
+        return getFullPath(false);
     }
 
+    public String getFullPath(boolean tmp) {
+        return (tmp ? getDirectory() + File.separator + getName(true): fullPath);
+    }
 
     public String getDirectory() {
         return directory;
     }
 
     public String getName() {
-        return name;
+        return getName(false);
+    }
+
+    public String getName(boolean tmp) {
+        return (tmp ? tempName : name);
     }
 
     @Override

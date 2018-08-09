@@ -1,8 +1,8 @@
 package priorg.main.tasks.database;
 
 
-import priorg.main.Id;
-import priorg.main.tasks.Category;
+import priorg.main.id.Id;
+import priorg.main.id.TaskId;
 import priorg.main.tasks.Task;
 import priorg.main.tasks.TaskItem;
 
@@ -28,8 +28,8 @@ public class CsvTaskHandler extends CsvHandler<TaskItem> {
     @Override
     protected Task parseItemImpl(String[] line) {
         // TODO: rewrite to opencsv annotations
-        Id<TaskItem> id = new Id<>(Integer.parseInt(line[0]), TaskItem.class);
-        Id<TaskItem> parentId = new Id<>(Integer.parseInt(line[1]), TaskItem.class);
+        Id id = new TaskId(Integer.parseInt(line[0]));
+        Id parentId = new TaskId(Integer.parseInt(line[1]));
         String name = line[2];
         String description = line[3];
         int priority = Integer.parseInt(line[4]);

@@ -1,7 +1,7 @@
 package priorg.main.tasks.database;
 
-import priorg.main.Id;
-import priorg.main.Identifiable;
+import priorg.main.id.Id;
+import priorg.main.id.Identifiable;
 
 import java.io.*;
 import java.util.HashMap;
@@ -34,9 +34,9 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
 
 
     /**
-     * =====================
-     * | Tree load from db |
-     * =====================
+     * ==============================
+     * | Converting db into the map |
+     * ==============================
      * */
 
     private void buildMap() {
@@ -73,21 +73,25 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         return items;
     }
 
+    public T getItemById(Id id) {
+        return getItemsMap().get(id);
+    }
+
     public int getItemCounter() {
         return itemCounter;
     }
 
-    public int getNextId() {
+    public int getNextAvailableId() {
         return idCounter;
     }
 
     /**
      * =================
-     * | Task renaming |
+     * | Item renaming |
      * =================
      * */
 
-    public void renameTaskItem(T item, String newName) {
+    public void renameItem(T item, String newName) {
 //        checkDuplicates(item);
         openDbFile(CsvDatabaseFile.READ);
 
@@ -96,7 +100,7 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
 
     /**
      * =================
-     * | Task addition |
+     * | Item addition |
      * =================
      * */
 
@@ -105,6 +109,29 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         openDbFile(CsvDatabaseFile.APPEND);
     }
 
+
+    public void removeEntry(T item) throws IOException {
+        openDbFile(CsvDatabaseFile.EDIT);
+        Id itemId = item.getId();
+
+        try {
+            //TODO: remove from subchildren
+            String[] line;
+            while ((line = dbFile.readNext()) != null) {
+                if (line[0].equals(String.valueOf(itemId.getValue()))) {
+                    getItemsMap().remove(itemId);
+                    itemCounter--;
+                    continue;
+                }
+                dbFile.writeNext(line);
+            }
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            dbFile.close();
+        }
+    }
 
     /**
      * =========

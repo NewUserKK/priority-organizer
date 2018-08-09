@@ -60,6 +60,7 @@ public class MainController implements Initializable {
     @FXML private Text detailsDeadline;
     @FXML private Text detailsDescription;
 
+    @FXML
     public void onMenuItemClick() {
         if (currentTreeItem != null) {
             TaskItem currentItem = currentTreeItem.getValue();
@@ -98,6 +99,7 @@ public class MainController implements Initializable {
 
     @FXML private Label statusLabel;
 
+    @FXML
     public void onButtonPressed(Event event) {
         try {
             statusLabel.setText(((Button) event.getSource()).getText());
@@ -106,6 +108,7 @@ public class MainController implements Initializable {
         }
     }
 
+    @FXML
     public void onTaskAddition(Event event) {
         onButtonPressed(event);
 
@@ -130,13 +133,14 @@ public class MainController implements Initializable {
 //        }
     }
 
+    @FXML
     public void onEditButton() {
-        try {
-            new AddEditWindow().start(new Stage());
-        } catch (Exception e) {
-            System.err.println("Error while starting edit window:");
-            System.err.println(e.getMessage());
-        }
+        tasksList.getCellFactory().call(tasksList).startEdit();
+    }
+
+    @FXML
+    public void onDeleteButton() {
+        currentTreeItem.getValue().removeFromDb();
     }
 
 

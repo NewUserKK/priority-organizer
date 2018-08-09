@@ -1,12 +1,11 @@
 package priorg.main.tasks;
 
-import priorg.main.Id;
+import priorg.main.id.Id;
 import priorg.main.tasks.database.CsvCategoryHandler;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * @author Konstantin Kostin

@@ -1,4 +1,4 @@
-package priorg.main;
+package priorg.main.id;
 
 public interface Identifiable {
 

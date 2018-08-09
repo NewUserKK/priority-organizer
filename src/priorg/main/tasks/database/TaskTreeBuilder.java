@@ -1,13 +1,13 @@
 package priorg.main.tasks.database;
 
 import javafx.scene.control.TreeItem;
+import priorg.main.id.CategoryId;
 import priorg.main.tasks.Category;
-import priorg.main.Id;
+import priorg.main.id.Id;
 import priorg.main.tasks.TaskItem;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class TaskTreeBuilder {
 
@@ -28,8 +28,9 @@ public class TaskTreeBuilder {
     }
 
     public TreeItem<TaskItem> loadTree() {
+        // TODO: alphabetic sorting
         TreeItem<TaskItem> root = new TreeItem<>(
-                new Category(new Id<>(-1, TaskItem.class), "TREE_ROOT"));
+                new Category(new CategoryId(-1), "TREE_ROOT"));
 
         for (TreeItem<TaskItem> categoryItem: categoryMap.values()) {
             Category category = (Category) categoryItem.getValue();

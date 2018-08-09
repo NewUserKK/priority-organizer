@@ -1,15 +1,19 @@
 package priorg.main.tasks;
 
 import com.opencsv.bean.CsvBindByName;
-import priorg.main.Id;
-import priorg.main.Identifiable;
+import priorg.main.id.Id;
+import priorg.main.id.Identifiable;
 import priorg.main.tasks.database.CsvCategoryHandler;
+import priorg.main.tasks.database.CsvHandler;
+import priorg.main.tasks.database.CsvTaskHandler;
+
+import java.io.IOException;
 
 
 /**
  * @author Konstantin Kostin
  */
-public class TaskItem implements Comparable<TaskItem>, Identifiable {
+public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
 
     @CsvBindByName(column = "Parent ID")
     private Id parentId;
@@ -37,6 +41,26 @@ public class TaskItem implements Comparable<TaskItem>, Identifiable {
         this.root = isRoot;
     }
 
+    public void removeFromDb() {
+        CsvHandler<TaskItem> db;
+        if (this instanceof Category) {
+            db = CsvCategoryHandler.getInstance();
+        } else if (this instanceof Task) {
+            db = CsvTaskHandler.getInstance();
+        } else {
+            throw new IllegalArgumentException("Cant find db for class " + getClass().getName());
+        }
+
+        try {
+            db.removeEntry(this);
+            // TODO: remove from subchildren
+//            db.getItemById(parentId).
+        } catch (IOException e) {
+            System.err.println("Error while removing item " + getName() + " from db");
+        }
+
+    }
+
     public void setName(String newName) {
         this.name = newName;
     }
@@ -62,7 +86,7 @@ public class TaskItem implements Comparable<TaskItem>, Identifiable {
     }
 
     public Id getParentId() {
-        return CsvCategoryHandler.getInstance().getItemsMap().get(parentId).getId();
+        return CsvCategoryHandler.getInstance().getItemById(parentId).getId();
     }
 
     public boolean isRoot() {

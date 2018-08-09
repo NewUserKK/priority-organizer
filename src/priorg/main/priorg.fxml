@@ -50,7 +50,7 @@
                               <ButtonBar id="tasksButtons" buttonMinWidth="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="244.0">
                                 <buttons>
                                   <Button id="tasksAddButton" fx:id="tasksAddButton" mnemonicParsing="false" onAction="#onTaskAddition" text="+" />
-                                    <Button id="tasksRemoveButton" fx:id="tasksRemoveButton" mnemonicParsing="false" onAction="#onButtonPressed" text="-" />
+                                    <Button id="tasksRemoveButton" fx:id="tasksRemoveButton" mnemonicParsing="false" onAction="#onDeleteButton" text="-" />
                                     <Button id="tasksEditButton" fx:id="tasksEditButton" mnemonicParsing="false" onAction="#onEditButton" text="e" />
                                 </buttons>
                                  <opaqueInsets>

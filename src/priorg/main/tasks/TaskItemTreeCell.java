@@ -3,6 +3,8 @@ package priorg.main.tasks;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import priorg.buttons.AddEditWindow;
 import priorg.main.MainController;
 
 
@@ -20,13 +22,19 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
     @Override
     public void startEdit() {
         super.startEdit();
-        if (editField == null) {
-            createTextField();
+//        if (editField == null) {
+//            createTextField();
+//        }
+//        setText(null);
+//        setGraphic(editField);
+//        editField.setText(getItemName());
+//        editField.selectAll();
+        try {
+            new AddEditWindow().start(new Stage());
+        } catch (Exception e) {
+            System.err.println("Error while starting edit window:");
+            System.err.println(e.getMessage());
         }
-        setText(null);
-        setGraphic(editField);
-        editField.setText(getItemName());
-        editField.selectAll();
     }
 
     private void createTextField() {
