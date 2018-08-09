@@ -6,7 +6,8 @@ import priorg.main.id.Id;
 import java.time.LocalDate;
 
 /**
- * @author Konstantin Kostin
+ * Class representing a task.
+ * Task is a {@link TaskItem} with addition of priority and deadline.
  */
 public class Task extends TaskItem {
 

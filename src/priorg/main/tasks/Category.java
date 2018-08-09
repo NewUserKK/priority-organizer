@@ -8,7 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Konstantin Kostin
+ * Class representing category of tasks.
+ * May have subcategories and subtasks into itself.
  */
 public class Category extends TaskItem {
 
@@ -17,12 +18,8 @@ public class Category extends TaskItem {
 
 
     public Category(Id id, String name) {
-        this(id, name, false);
-    }
-
-    public Category(Id id, String name, boolean isRoot) {
-        super(id, name, isRoot);
-        CsvCategoryHandler.getInstance().getItemsMap().put(id, this);
+        super(id, name);
+//        CsvCategoryHandler.getInstance().getItemsMap().put(id, this);
     }
 
     public Set<Id> getSubCategories() {
@@ -44,16 +41,5 @@ public class Category extends TaskItem {
     private void addItemById(Set<Id> set, Id id0, Id ... ids) {
         set.add(id0);
         set.addAll(Arrays.asList(ids));
-    }
-
-
-    public void addItem(TaskItem item) {
-        // TODO: move to abstract?
-        if (item instanceof Category) {
-            subCategories.add(item.getId());
-        } else {
-            subTasks.add(item.getId());
-        }
-//        item.setParentId(this);
     }
 }

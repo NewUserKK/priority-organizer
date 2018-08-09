@@ -35,6 +35,13 @@ public class MainController implements Initializable {
 
     @FXML private TreeView<TaskItem> tasksList;
 
+    /**
+     * Perform application initialization:
+     * [*] Build TreeView of tasks
+     *
+     * @param location {@link javafx.fxml.Initializable}
+     * @param resources {@link javafx.fxml.Initializable}
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TreeItem<TaskItem> rootItem = new TaskTreeBuilder().loadTree();
@@ -42,12 +49,13 @@ public class MainController implements Initializable {
         tasksList.setCellFactory((treeView) -> new TaskItemTreeCell());
     }
 
-    /**
+    /*
      * ==================
      * | Task list edit |
      * ==================
      * */
 
+    /** Current active tree item */
     public static TreeItem<TaskItem> currentTreeItem; // TODO: is set on TaskItemTreeCell. Make more obvious?
 
     @FXML private ScrollPane detailsPane;

@@ -10,8 +10,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Singleton {@link CsvHandler} implementation for the {@link Task}
+ */
 public class CsvTaskHandler extends CsvHandler<TaskItem> {
 
+    /** One and only instance of this class */
     private static CsvTaskHandler instance;
 
     private CsvTaskHandler(DatabasePath dbPath) {
@@ -25,9 +29,24 @@ public class CsvTaskHandler extends CsvHandler<TaskItem> {
         return instance;
     }
 
+    /**
+     * Parse line according to the CSV file.
+     * Current indexes:
+     * 0 - id
+     * 1 - id of a parent
+     * 2 - name
+     * 3 - description
+     * 4 - priority of a task
+     * 5 - deadline in format dd.MM.yyyy
+     *
+     * @param line line from CSV file to parse
+     * @return Task object with info from parsed data
+     */
     @Override
     protected Task parseItemImpl(String[] line) {
+        // TODO: move to abstract
         // TODO: rewrite to opencsv annotations
+        // TODO: add time to deadline
         Id id = new TaskId(Integer.parseInt(line[0]));
         Id parentId = new TaskId(Integer.parseInt(line[1]));
         String name = line[2];
@@ -44,6 +63,17 @@ public class CsvTaskHandler extends CsvHandler<TaskItem> {
         return task;
     }
 
+    @Override
+    protected void removeEntryImpl(TaskItem item) {
+
+    }
+
+    /**
+     * Transforming date string into the LocalDate object
+     *
+     * @param rawDate string containing the date
+     * @return LocalDate object representing the same date
+     */
     private LocalDate extractDate(String rawDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate date;

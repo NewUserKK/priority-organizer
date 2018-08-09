@@ -9,7 +9,7 @@ import priorg.main.MainController;
 
 
 /**
- * @author Konstantin Kostin
+ * Class representing tree cell of {@link javafx.scene.control.TreeView}
  * */
 public class TaskItemTreeCell extends TreeCell<TaskItem> {
 
@@ -19,6 +19,9 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
         setOnMouseReleased((e) -> MainController.currentTreeItem = this.getTreeItem());
     }
 
+    /**
+     * Method invoked at starting edition of the cell (double-click for example)
+     */
     @Override
     public void startEdit() {
         super.startEdit();
@@ -50,6 +53,7 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
         });
     }
 
+    /** Method invokes on cancelling edition */
     @Override
     public void cancelEdit() {
         super.cancelEdit();
@@ -57,12 +61,14 @@ public class TaskItemTreeCell extends TreeCell<TaskItem> {
         setGraphic(getTreeItem().getGraphic());
     }
 
+    /** Method invokes on commiting edition */
     @Override
     public void commitEdit(TaskItem newValue) {
         super.commitEdit(newValue);
         setText(newValue.getName());
     }
 
+    /** @see TreeCell */
     @Override
     protected void updateItem(TaskItem item, boolean empty) {
         super.updateItem(item, empty);

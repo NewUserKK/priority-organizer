@@ -11,9 +11,17 @@ import java.io.IOException;
 
 
 /**
- * @author Konstantin Kostin
+ * Class representing any item that refers to the tasks. Currently it is {@link Task} and {@link Category}.
+ * It has unique ID, name, description and parent.
+ *
+ * Task item can be compared with another item in the following way:
+ *   1. If items have not the same class then Category is "greater", then a Task
+ *   2. Otherwise they are compared as their names - alphabetically
  */
 public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
+
+    @CsvBindByName(column = "ID")
+    private Id id;
 
     @CsvBindByName(column = "Parent ID")
     private Id parentId;
@@ -24,23 +32,16 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
     @CsvBindByName(column = "Description")
     private String description;
 
-    @CsvBindByName(column = "ID")
-    private Id id;
-
-    private boolean root = false;
-
 
     public TaskItem(Id id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public TaskItem(Id id, String name, boolean isRoot) {
-        this.id = id;
-        this.name = name;
-        this.root = isRoot;
-    }
-
+    /**
+     * Remove item from database.
+     * @see CsvHandler
+     */
     public void removeFromDb() {
         CsvHandler<TaskItem> db;
         if (this instanceof Category) {
@@ -53,8 +54,6 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
 
         try {
             db.removeEntry(this);
-            // TODO: remove from subchildren
-//            db.getItemById(parentId).
         } catch (IOException e) {
             System.err.println("Error while removing item " + getName() + " from db");
         }
@@ -86,11 +85,7 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
     }
 
     public Id getParentId() {
-        return CsvCategoryHandler.getInstance().getItemById(parentId).getId();
-    }
-
-    public boolean isRoot() {
-        return root;
+        return parentId;
     }
 
     @Override
@@ -117,6 +112,6 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return id.hashCode();
     }
 }

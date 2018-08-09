@@ -4,16 +4,23 @@ package priorg.main.tasks.database;
 import java.io.File;
 
 /**
- * @author Konstantin Kostin
+ * Enumeration of database paths in a filesystem.
+ * Allows to extract file name and parent directory from the full path.
+ * Also besides actual name you can get name of a temporary object in the same directory
  * */
 public enum DatabasePath {
 
+    /** Path to tasks db */
     TASKS("db/tasks.csv"),
+
+    /** Path to categories db */
     CATEGORIES("db/categories.csv");
 
     private String fullPath;
     private String directory;
     private String name;
+
+    /** Name for temporary file */
     private String tempName;
 
     DatabasePath(String fullPath) {

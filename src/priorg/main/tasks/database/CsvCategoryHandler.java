@@ -7,8 +7,12 @@ import priorg.main.tasks.Category;
 import priorg.main.id.Id;
 import priorg.main.tasks.TaskItem;
 
+/**
+ * Singleton {@link CsvHandler} implementation for {@link Category}
+ */
 public class CsvCategoryHandler extends CsvHandler<TaskItem> {
 
+    /** One and only instance of this class */
     private static CsvCategoryHandler instance;
 
     private CsvCategoryHandler(DatabasePath dbPath) {
@@ -22,6 +26,19 @@ public class CsvCategoryHandler extends CsvHandler<TaskItem> {
         return instance;
     }
 
+    /**
+     * Parse line according to the CSV file.
+     * Current indexes:
+     * 0 - id
+     * 1 - id of a parent
+     * 2 - name
+     * 3 - description
+     * 4 - subcategories represented with numbers (IDs), separated by space
+     * 5 - subtasks represented with numbers (IDs), separated by space
+     *
+     * @param line line from CSV file to parse
+     * @return Category object with info from parsed data
+     */
     @Override
     protected Category parseItemImpl(String[] line) {
         // TODO: rewrite to opencsv annotations
@@ -49,6 +66,11 @@ public class CsvCategoryHandler extends CsvHandler<TaskItem> {
         }
 
         return cat;
+    }
+
+    @Override
+    protected void removeEntryImpl(TaskItem item) {
+
     }
 
 }

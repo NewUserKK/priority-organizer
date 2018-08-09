@@ -9,19 +9,36 @@ import java.util.Map;
 
 
 /**
- * @author Konstantin Kostin
+ * Handler for abstract CSV database of objects.
+ * Performs basic operations such as transforming CSV file to {@link Map},
+ * adding or removing entries and so on.
+ *
+ * Objects in the database must have unique ID.
+ *
+ * @param <T> type of {@link Identifiable} objects that database stores
  * */
 public abstract class CsvHandler<T extends Identifiable> implements AutoCloseable {
 
+    /** Counter for items that database has */
     private int itemCounter = 0;
+
+    /** Counter representing the smallest not used yet ID */
     private int idCounter = 0;
 
+    /** CSV database file */
     private CsvDatabaseFile dbFile;
+
+    /** Map of items */
     private Map<Id, T> items;
 
-    protected CsvHandler(DatabasePath dbPath) {
+
+    /**
+     * Constructor for handler. Takes {@link DatabasePath} object representing the path to a db file
+     *
+     * @param dbPath path to db file
+     */
+    CsvHandler(DatabasePath dbPath) {
         this.dbFile = new CsvDatabaseFile(dbPath);
-        openDbFile(CsvDatabaseFile.READ);
     }
 
     private void openDbFile(String mode) {
@@ -33,18 +50,21 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
     }
 
 
-    /**
+    /*
      * ==============================
      * | Converting db into the map |
      * ==============================
      * */
 
+    /**
+     * Build map from CSV file.
+     */
     private void buildMap() {
         openDbFile(CsvDatabaseFile.READ);
         this.items = new HashMap<>();
 
         try {
-            dbFile.skip(1);
+            dbFile.skip(1);  // skip header
 
             String[] line;
             while ((line = dbFile.readNext()) != null) {
@@ -60,12 +80,24 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         }
     }
 
+    /**
+     * Parse item from CSV line.
+     *
+     * @param line line from CSV file representing an object
+     * @return instance of object with parsed properties
+     */
     public T parseItem(String[] line) {
         return parseItemImpl(line);
     }
 
     protected abstract T parseItemImpl(String[] line);
 
+    /**
+     * Return map of items in db with its ID as keys and objects as values.
+     * If map is not exist yet, it is built first.
+     *
+     * @return map with db items
+     */
     public Map<Id, T> getItemsMap() {
         if (items == null) {
             buildMap();
@@ -73,43 +105,57 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         return items;
     }
 
+    /**
+     * Return an object by ID
+     *
+     * @param id ID of an object
+     * @return object that have requested ID
+     */
     public T getItemById(Id id) {
         return getItemsMap().get(id);
     }
 
+    /**
+     * Return how much items database has
+     *
+     * @return current size of database
+     */
     public int getItemCounter() {
         return itemCounter;
     }
 
-    public int getNextAvailableId() {
+    /**
+     * Return next smallest available ID to use
+     *
+     * @return next free ID
+     */
+    public int getAvailableId() {
         return idCounter;
     }
 
-    /**
-     * =================
-     * | Item renaming |
-     * =================
-     * */
 
-    public void renameItem(T item, String newName) {
-//        checkDuplicates(item);
-        openDbFile(CsvDatabaseFile.READ);
-
-//        String oldName = item.getName();
-    }
-
-    /**
+    /*
      * =================
      * | Item addition |
      * =================
      * */
 
+    /**
+     * Add entry to the database file
+     *
+     * @param newItem new item to add in the database
+     */
     public void addEntry(T newItem) {
-//        checkDuplicates(newItem);
         openDbFile(CsvDatabaseFile.APPEND);
     }
 
-
+    /**
+     * Remove existing entry from the database.
+     * Make sure to remove its occurrence from any other databases connected with it as well.
+     *
+     * @param item item to remove
+     * @throws IOException if an I/O exception occurs
+     */
     public void removeEntry(T item) throws IOException {
         openDbFile(CsvDatabaseFile.EDIT);
         Id itemId = item.getId();
@@ -120,6 +166,7 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
             while ((line = dbFile.readNext()) != null) {
                 if (line[0].equals(String.valueOf(itemId.getValue()))) {
                     getItemsMap().remove(itemId);
+                    removeEntryImpl(item);
                     itemCounter--;
                     continue;
                 }
@@ -133,13 +180,19 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         }
     }
 
+    protected abstract void removeEntryImpl(T item);
+
     /**
      * =========
      * | Utils |
      * =========
      * */
 
-
+    /**
+     * Close database file
+     *
+     * @throws IOException if an I/O exception occurs
+     */
     @Override
     public void close() throws IOException {
         dbFile.close();

@@ -1,5 +1,6 @@
 package priorg.main.id;
 
+/** Class representing ID of an object. */
 public abstract class Id {
 
     private int id;
@@ -13,13 +14,13 @@ public abstract class Id {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
 
-        if (getClass().equals(o.getClass())) {
-            return (id == ((Id) o).id);
+        if (getClass().equals(obj.getClass())) {
+            return (id == ((Id) obj).id);
         }
 
         return false;

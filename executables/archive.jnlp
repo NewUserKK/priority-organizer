@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="archive.jar" size="31625" download="eager" />
+    <jar href="archive.jar" size="30747" download="eager" />
   </resources>
   <jfx:javafx-desc  width="1000" height="700" main-class="priorg.main.Priorg"  name="Priorg:jar" />
   <update check="background"/>
