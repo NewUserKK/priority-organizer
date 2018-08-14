@@ -5,6 +5,7 @@ import priorg.main.id.CategoryId;
 import priorg.main.id.TaskId;
 import priorg.main.tasks.Category;
 import priorg.main.id.Id;
+import priorg.main.tasks.Task;
 import priorg.main.tasks.TaskItem;
 
 /**
@@ -69,8 +70,16 @@ public class CsvCategoryHandler extends CsvHandler<TaskItem> {
     }
 
     @Override
-    protected void removeEntryImpl(TaskItem item) {
-
+    protected void removeConnections(TaskItem currentItem, TaskItem itemToRemove) {
+        if (currentItem instanceof Category) {
+            ((Category) currentItem).getSubCategories().remove(itemToRemove.getId());
+        } else if (currentItem instanceof Task) {
+            if (currentItem.getParentId().equals(itemToRemove.getId())) {
+                //TODO delete
+            }
+        } else {
+            throw new IllegalArgumentException("Unknown TaskItem descendant");
+        }
     }
 
 }

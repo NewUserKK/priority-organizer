@@ -13,7 +13,7 @@ import java.util.Map;
  * Performs basic operations such as transforming CSV file to {@link Map},
  * adding or removing entries and so on.
  *
- * Objects in the database must have unique ID.
+ * Objects in the database must have unique ID, written in a first column.
  *
  * @param <T> type of {@link Identifiable} objects that database stores
  * */
@@ -164,12 +164,13 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
             //TODO: remove from subchildren
             String[] line;
             while ((line = dbFile.readNext()) != null) {
-                if (line[0].equals(String.valueOf(itemId.getValue()))) {
+                T currentItem = parseItem(line);
+                if (currentItem.equals(item)) {
                     getItemsMap().remove(itemId);
-                    removeEntryImpl(item);
                     itemCounter--;
                     continue;
                 }
+                removeConnections(currentItem, item);
                 dbFile.writeNext(line);
             }
 
@@ -180,9 +181,9 @@ public abstract class CsvHandler<T extends Identifiable> implements AutoCloseabl
         }
     }
 
-    protected abstract void removeEntryImpl(T item);
+    protected abstract void removeConnections(T currentItem, T itemToRemove);
 
-    /**
+    /*
      * =========
      * | Utils |
      * =========

@@ -43,14 +43,7 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
      * @see CsvHandler
      */
     public void removeFromDb() {
-        CsvHandler<TaskItem> db;
-        if (this instanceof Category) {
-            db = CsvCategoryHandler.getInstance();
-        } else if (this instanceof Task) {
-            db = CsvTaskHandler.getInstance();
-        } else {
-            throw new IllegalArgumentException("Cant find db for class " + getClass().getName());
-        }
+        CsvHandler<TaskItem> db = getDbInstance();
 
         try {
             db.removeEntry(this);
@@ -58,6 +51,16 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
             System.err.println("Error while removing item " + getName() + " from db");
         }
 
+    }
+
+    private CsvHandler<TaskItem> getDbInstance() {
+        if (this instanceof Category) {
+            return CsvCategoryHandler.getInstance();
+        } else if (this instanceof Task) {
+            return CsvTaskHandler.getInstance();
+        } else {
+            throw new IllegalArgumentException("Cant find db for class " + getClass().getName());
+        }
     }
 
     public void setName(String newName) {
@@ -108,6 +111,18 @@ public abstract class TaskItem implements Comparable<TaskItem>, Identifiable {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // TODO: proper fields equals
+        if (this == obj) {
+            return true;
+        }
+        if (getClass().equals(obj.getClass())) {
+            return id == ((TaskItem) obj).id;
+        }
+        return false;
     }
 
     @Override
