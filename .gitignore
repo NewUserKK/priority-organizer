@@ -4,3 +4,5 @@ out/
 *_backup.*
 backups/
 META-INF
+target/
+src/test/

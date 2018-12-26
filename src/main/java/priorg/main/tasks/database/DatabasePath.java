@@ -16,6 +16,9 @@ public enum DatabasePath {
     /** Path to categories db */
     CATEGORIES("db/categories.csv");
 
+    // escaping for non-unix systems
+    private String SEPARATOR;
+
     private String fullPath;
     private String directory;
     private String name;
@@ -24,6 +27,7 @@ public enum DatabasePath {
     private String tempName;
 
     DatabasePath(String fullPath) {
+        SEPARATOR = File.separator.replace("\\", "\\\\");
         this.fullPath = fullPath;
         this.directory = parseDirectoryPath(fullPath);
         this.name = parseFileName(fullPath);
@@ -31,16 +35,16 @@ public enum DatabasePath {
     }
 
     private String parseDirectoryPath(String fullPath) {
-        String[] pathSplit = fullPath.split(File.separator);
+        String[] pathSplit = fullPath.split(SEPARATOR);
         StringBuilder dir = new StringBuilder();
         for (int i = 0; i < pathSplit.length - 1; i++) {
-            dir.append(pathSplit[i]);
+            dir.append(pathSplit[i]).append(SEPARATOR);
         }
         return dir.toString();
     }
 
     private String parseFileName(String fullPath) {
-        String[] pathSplit = fullPath.split(File.separator);
+        String[] pathSplit = fullPath.split(SEPARATOR);
         return pathSplit[pathSplit.length - 1];
     }
 
@@ -49,7 +53,7 @@ public enum DatabasePath {
     }
 
     public String getFullPath(boolean tmp) {
-        return (tmp ? getDirectory() + File.separator + getName(true): fullPath);
+        return (tmp ? getDirectory() + SEPARATOR + getName(true): fullPath);
     }
 
     public String getDirectory() {

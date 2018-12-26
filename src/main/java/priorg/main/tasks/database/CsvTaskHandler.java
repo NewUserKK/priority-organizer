@@ -64,7 +64,7 @@ public class CsvTaskHandler extends CsvHandler<TaskItem> {
     }
 
     @Override
-    protected void removeEntryImpl(TaskItem item) {
+    protected void removeConnections(TaskItem currentItem, TaskItem itemToRemove) {
 
     }
 

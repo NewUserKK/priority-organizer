@@ -4,8 +4,10 @@ import javafx.scene.control.TreeItem;
 import priorg.main.id.CategoryId;
 import priorg.main.tasks.Category;
 import priorg.main.id.Id;
+import priorg.main.tasks.Task;
 import priorg.main.tasks.TaskItem;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +50,6 @@ public class TaskTreeBuilder {
      * @return root of built tree
      */
     public TreeItem<TaskItem> loadTree() {
-        // TODO: alphabetic sorting
         TreeItem<TaskItem> root = new TreeItem<>(
                 new Category(new CategoryId(-1), "TREE_ROOT"));
         categoryMap.put(root.getValue().getId(), root);
@@ -72,7 +73,7 @@ public class TaskTreeBuilder {
                 categoryItem.getChildren().add(taskMap.get(subTaskId));
             }
         }
-
+        root.getChildren().sort(Comparator.comparing(TreeItem::getValue));
         return root;
     }
 

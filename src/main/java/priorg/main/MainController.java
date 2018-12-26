@@ -19,15 +19,12 @@ import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * @author Konstantin Kostin
- */
 public class MainController implements Initializable {
 
     public MainController() {
     }
 
-    /**
+    /*
      * ============================
      * | Task list initialization |
      * ============================
